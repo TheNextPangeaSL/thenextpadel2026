@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TheNextPangea Pádel 2026</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+
+<body class="bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-semibold" href="#home">TheNextPangea Pádel 2026</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#calendar">Calendario</a></li>
+          <li class="nav-item"><a class="nav-link" href="#rounds">Jornadas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#standings">Clasificación</a></li>
+          <li class="nav-item"><a class="nav-link" href="#rules">Normativa</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2">
+          <span id="lastUpdated" class="text-white-50 small"></span>
+          <button id="btnRefresh" class="btn btn-outline-light btn-sm">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <!-- Alerts -->
+    <div id="alertBox" class="d-none"></div>
+
+    <!-- HOME -->
+    <section id="view-home" class="view">
+      <div class="row g-3">
+        <div class="col-12 col-lg-7">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="card-title mb-1">Jornada actual</h5>
+                  <div id="homeRoundMeta" class="text-body-secondary small"></div>
+                </div>
+                <span id="homeRoundBadge" class="badge text-bg-primary d-none"></span>
+              </div>
+              <div id="homeRoundMatches" class="mt-3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title mb-2">Top-4 (ahora)</h5>
+              <div id="homeTop4" class="table-responsive"></div>
+              <div class="text-body-secondary small mt-2">
+                * Se recalcula en el navegador a partir de los resultados.
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow-sm mt-3">
+            <div class="card-body">
+              <h6 class="card-title mb-2">Próximos partidos</h6>
+              <div id="homeUpcoming" class="small"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section id="view-calendar" class="view d-none">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="card-title mb-0">Calendario</h5>
+            <div class="text-body-secondary small">Click en un partido para ver detalle</div>
+          </div>
+          <div id="calendar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROUNDS -->
+    <section id="view-rounds" class="view d-none">
+      <div class="row g-3">
+        <div class="col-12 col-lg-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title mb-2">Jornadas</h5>
+              <div id="roundList" class="list-group"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 id="roundDetailTitle" class="card-title mb-1">Selecciona una jornada</h5>
+                  <div id="roundDetailDates" class="text-body-secondary small"></div>
+                </div>
+                <span id="roundDetailStage" class="badge text-bg-secondary d-none"></span>
+              </div>
+              <div id="roundDetailBye" class="mt-3"></div>
+              <div id="roundDetailMatches" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STANDINGS -->
+    <section id="view-standings" class="view d-none">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="card-title mb-0">Clasificación</h5>
+            <div class="small text-body-secondary">Orden: Puntos → Victorias → Sets +/- → Juegos +/- → Directo</div>
+          </div>
+          <div id="standingsTable" class="table-responsive"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="view-rules" class="view d-none">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Normativa</h5>
+
+          <h6 class="mt-3">Formato</h6>
+          <ul>
+            <li>Participan <b>9 equipos</b>.</li>
+            <li>Fase regular: <b>todos contra todos</b>. Cada equipo juega <b>8 partidos</b> y <b>descansa 1 jornada</b> (9 jornadas en total).</li>
+            <li>Cada jornada dura <b>2 semanas</b>.</li>
+            <li>Playoffs: pasan los <b>4 primeros</b> a semifinales (1º vs 4º, 2º vs 3º) y final.</li>
+          </ul>
+
+          <h6 class="mt-3">Puntuación de liga</h6>
+          <ul>
+            <li>Partido ganado: <b>3 puntos</b></li>
+            <li>Partido empatado: <b>2 puntos</b></li>
+            <li>Partido perdido: <b>1 punto</b></li>
+            <li>Partido no jugado: <b>0 puntos</b></li>
+          </ul>
+
+          <h6 class="mt-3">Desempates (en este orden)</h6>
+          <ol>
+            <li>Puntos totales</li>
+            <li>Victorias</li>
+            <li>Diferencia de sets (sets ganados − sets perdidos)</li>
+            <li>Diferencia de juegos (juegos ganados − juegos perdidos)</li>
+            <li>Enfrentamiento directo (si aplica y resuelve el empate)</li>
+          </ol>
+
+          <h6 class="mt-3">Resultados</h6>
+          <ul>
+	    <li>Los resultados se comunican a Xuan, que los actualizará en la web</li>
+            <li>Se registra el resultado por <b>juegos</b> en cada set: <code>6-3, 4-6, 2-6</code>.</li>
+            <li>Si termina 2-0, el set 3 se deja vacío.</li>
+            <li>Si por tiempo no se termina el partido, se puede marcar como <b>empate</b> mediante <code>status=draw</code> (lo hace Xuan).</li>
+          </ul>
+
+
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Match Modal -->
+  <div class="modal fade" id="matchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="matchModalTitle" class="modal-title">Partido</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="matchModalBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- App -->
+  <script type="module" src="./assets/app.js"></script>
+</body>
+</html>
+

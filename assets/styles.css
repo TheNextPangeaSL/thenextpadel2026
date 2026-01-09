@@ -1,0 +1,79 @@
+#calendar {
+  max-width: 100%;
+}
+
+.view .card {
+  border: 0;
+}
+
+.list-group .active {
+  border-color: rgba(0,0,0,.1);
+}
+
+code {
+  background: rgba(0,0,0,.05);
+  padding: 0.1rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+/* FullCalendar: estados visuales */
+.fc-event-played { opacity: 0.95; }
+.fc-event-draw { opacity: 0.95; }
+.fc-event-playoff { font-weight: 600; }
+
+/* ====== Calendario global (mini-meses) ====== */
+.cal-grid{
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: .35rem;
+}
+
+.cal-dow{
+  font-size: .75rem;
+  text-align: center;
+  color: rgba(0,0,0,.55);
+  padding: .1rem 0;
+}
+
+.cal-cell{
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: .6rem;
+  padding: .35rem .4rem;
+  min-height: 52px;
+  position: relative;
+  background: #fff;
+  transition: transform .05s ease, box-shadow .05s ease;
+}
+
+.cal-cell.cal-round{
+  cursor: pointer;
+}
+
+.cal-cell.cal-round:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.cal-day{
+  font-weight: 600;
+  font-size: .9rem;
+  line-height: 1;
+}
+
+.cal-tag{
+  position: absolute;
+  right: .35rem;
+  bottom: .25rem;
+  font-size: .7rem;
+  font-weight: 700;
+  opacity: .9;
+}
+
+/* Ajustes: celdas fuera de mes */
+.text-body-tertiary .cal-day{
+  font-weight: 500;
+}
+
+/* Mejoras generales */
+.view .card { border: 0; }
+
